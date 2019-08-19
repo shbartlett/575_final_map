@@ -48,7 +48,7 @@ function getData(map){
             weight: 0.6,
             opacity: 0.6,
             color: 'white',
-            fillOpacity: getOpacity(feature.properties.Grand_Tota),
+            fillOpacity: 0.6,
             fillColor: getColor(feature.properties.Grand_Tota)
         };
     };
@@ -63,14 +63,6 @@ function getData(map){
 
     };
 
-    //opacity is determined on tot1960 with greater walkability being more opaque
-    function getOpacity(o){
-        return o >= 0 & o <=10 ?  .8:
-               o >= 10.01 & o <= 20 ? .8:
-               o >= 20.01 & o <= 50 ? .8:
-               o >= 50.01 & o <= 120 ? .8:
-               0.5;
-    };
 
     //iterate through each feature in the geoJSON
     function onEachFeature(feature, layer) {
