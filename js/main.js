@@ -2,24 +2,35 @@ var globalMap, globalOutput, myJson;
 var attrArray = ['STUSPS','NAME','tot1950','tot1960','tot1970','tot1980','tot1990','tot2000','tot2010','Grand_Tota'];
 var expressed = attrArray[0];
 
+// Credits for map located in bottom right of map. 
+var mbAttr = 'Map created by: Moe R, Stephanie B, and Dwight F';
+
+var mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZGZpZWxkMjMiLCJhIjoiY2p4NThuaGYxMDB3bDQ4cXd0eWJiOGJoeSJ9.T94xCeDwJ268CmzfMPXdmw';
+
+// Basemap options located in top right of map. 
+var grayscale   = L.tileLayer(mbUrl, {id: 'mapbox.light', attribution: mbAttr}),
+dark  = L.tileLayer(mbUrl, {id: 'mapbox.dark',   attribution: mbAttr}),
+outdoors = L.tileLayer(mbUrl, {id: 'mapbox.outdoors',   attribution: mbAttr});
+
 //createMap builds the map, returns the variable globalMap, and establishes a constant, map
 function createMap(){
 	//create the map
     const map = L.map('map', {
             center: [32.38, -84.00],
             zoom: 5.5,
-            minZoom: 6
-    });
+            minZoom: 6,
+            layers:outdoors
+        });
+            var baseLayers = {
+            "Topographic": outdoors,
+            "Grayscale": grayscale,
+            "Darkscale": dark,
+        };
+            //call getData function
+            getData(map);
 
-    globalMap = map;
-    //add dark and light OSM base tilelayers
-    //let controlLayers = L.control.layers().addTo(map);
-    var light = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
-    }).addTo(map);
-
-        //call getData function
-        getData(map);
-    };
+            L.control.layers(baseLayers).addTo(map);
+    }
 
 //getData loads the geoJSON data into a readable format
 function getData(map){
@@ -35,7 +46,7 @@ function getData(map){
     function style(feature) {
         return {
             weight: 0.6,
-            opacity: 0.8,
+            opacity: 0.6,
             color: 'white',
             fillOpacity: getOpacity(feature.properties.Grand_Tota),
             fillColor: getColor(feature.properties.Grand_Tota)
