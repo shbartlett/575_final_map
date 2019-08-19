@@ -36,13 +36,13 @@ function createMap(){
 function getData(map){
   $.getJSON('data/REGION4.geojson', function(data){
 
-    //style each census tract with the appropriate color and outline properties
+    //style each tract with the appropriate color and outline properties
     geojson = L.geoJson(data, {
         style: style,
         onEachFeature: onEachFeature
     }).addTo(map);
 
-    //default layer style for each census tract
+    //default layer style for each tract
     function style(feature) {
         return {
             weight: 0.6,
@@ -53,12 +53,16 @@ function getData(map){
         };
     };
 
-    //choropleth color map based on tot1950 (reversed to accurately portray affordability)
+    //choropleth color map based on tot1950
     function getColor(b){
-        return b >=0 & b <= 9 ? '#f0f9e8':
-               b >=10 & b <=19 ? '#bae4bc':
+        return b <=0 ?  '#0000ffff':
+                b >=1 & b <= 3 ? '#f0f9e8':
+                b >= 4 & b <=9 ? '#bae4bc':
+               b >=10 & b <=19 ? '#4dffa6':
                b >=20 & b <=49 ? '#7bccc4':
-               b >=49 & b <=120 ? '#43a2ca':
+               b >=49 & b <=64 ? '#43a2ca':
+                b >=65 & b <=80 ? '#243BE8':
+                b >=80 & b <=120 ? '#0000A0':
                '#A8DDB5';
 
     };
