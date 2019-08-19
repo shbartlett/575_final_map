@@ -28,7 +28,7 @@ function createMap(){
         };
             //call getData function
             getData(map);
-
+            createSequenceControls(map);
             L.control.layers(baseLayers).addTo(map);
     }
 
@@ -251,6 +251,74 @@ function handleMouseenter(e){
 function handleMouseleave(e){
     //globalOutput.textContent = 'Census Block: , Location Index: , Walk Index:';
 }
+
+
+//Create new sequence controls
+function createSequenceControls(map){   
+    var SequenceControl = L.Control.extend({
+        options: {
+            position: 'bottomleft'
+        },
+        onAdd: function (map) {
+            // create the control container div with a particular class name
+            var container = L.DomUtil.create('div', 'sequence-control-container');
+
+            //create range input element (slider)
+            $(container).append('<input class="range-slider" type="range">');
+
+            //add skip buttons
+            $(container).append('<button class="skip" id="reverse" title="Reverse">Reverse</button>');
+            $(container).append('<button class="skip" id="forward" title="Forward">Skip</button>');
+
+
+            //kill any mouse event listeners on the map
+            $(container).on('mousedown dblclick', function(e){
+                L.DomEvent.stopPropagation(e);
+                map.dragging.disable();
+            });
+
+            return container;
+        }
+    });
+
+map.addControl(new SequenceControl());
+
+	//set slider attributes
+	$('.range-slider').attr({
+		max: 7,
+		min: 0,
+		value: 0,
+		step: 1
+	});
+
+	// create slider event handler
+	$('.range-slider').on('input', function () {
+		index = $(this).val();
+		$('#year').html(attributes[index]);
+		updatePropSymbols(map, attributes[index]);
+	});
+
+
+	//create button event handler
+	$('.skip').click(function () {
+		index = $('.range-slider').val();
+		if ($(this).attr('id') == 'forward') {
+			index++;
+			index = index > 6 ? 0 : index;
+        
+		} else if ($(this).attr('id') == 'reverse') {
+			index--;
+			index = index < 0 ? 6 : index;
+
+		}
+		$('.range-slider').val(index);
+        console.log(attributes[index]);
+        
+		updatePropSymbols(index);
+	});
+}
+
+
 
 //createPopup creates a popup with the LAI, WI, and CB# displayed for the reader
 

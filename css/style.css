@@ -3,6 +3,28 @@ body {
     font-size: 14px;
 }
 
+#forward {
+    float: right;
+}
+
+#reverse {
+    float: left;
+}
+
+.sequence-control-container {
+    width: 350px;
+    height: 23px;
+    background-color: rgba(255,255,255,0.8);
+    padding: 10px;
+    line-height: 15px;
+    text-align: center;
+    border: solid black 2px;
+}
+
+.range-slider {
+    width: 200px;
+}
+
 #wrapper {
 	 width: 960px;
 	 margin: 15px auto;
