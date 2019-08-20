@@ -28,7 +28,7 @@ function createMap(){
         };
             //call getData function
             getData(map);
-            createSequenceControls(map);
+           
             L.control.layers(baseLayers).addTo(map);
     }
 
